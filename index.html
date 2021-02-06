@@ -26,7 +26,8 @@
             search: null
         }
         let makeID = null
-        const BODY_PARAMETERS = {"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
+        let modelID = null
+        const BODY_PARAMETERS = {"Locations":["8"],"Models":["861"],"MakeID":makeID,"Years":[]}
 
 
         getLocationDataWithPromise().then(locationData => {
@@ -56,12 +57,12 @@
             const searchMake = split[1]
             const searchModel = split[2]
             //console.log(searchYear, searchMake, searchModel)
-            
+
 
             // Find the makeID for TOYOTA
             for (let e of data.make) {
-                if (e.makeName == 'TOYOTA') {
-                    console.log(`Toyota's makeID is ${e.makeID}`)
+                if (e.makeName == searchMake) {
+                    console.log(`${searchMake}'s makeID is ${e.makeID}`)
                     makeID = e.makeID
                     break
                 }
@@ -70,6 +71,15 @@
                 data.model = modelData
                 console.log('Found MODEL DATA:')
                 console.dir(data.model)
+
+                // Find the makeID for TOYOTA
+                for (let e of data.model) {
+                    if (e.modelName == searchModel) {
+                        console.log(`${searchModel}'s modelID is ${e.modelID}`)
+                        modelID = e.modelID
+                        break
+                    }
+                }
             })
             searchCar(BODY_PARAMETERS, makeID).then(searchResponse => {
                 console.log('DONE WITH CAR SEARCH!')
@@ -138,7 +148,7 @@
                 }
                 xhr.open('POST', 'https://inventoryservice.pullapart.com/Vehicle/Search', true)
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                xhr.send(JSON.stringify({"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}));   
+                xhr.send(JSON.stringify({"Locations":["8"],"Models":[string.parse(modelID)],"MakeID":makeID,"Years":[]}));   
                 
                 // xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 // xmlhttp.send(JSON.stringify({ "email": "hello@user.com", "response": { "name": "Tester" } }));                
