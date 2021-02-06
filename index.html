@@ -6,9 +6,31 @@
     <title>Document</title>
 </head>
 <body>
-    
+    <label>Car:
+        <input type="text" id="carInput">
+    </label>
+    <button id="addButton">Add</button>
+    <ul id="carList">
+
+    </ul>
     <script>
         console.log('hello world')
+        const carList = []
+        document.getElementById("addButton").addEventListener('click', () => {
+            const listEle = document.getElementById("carList")
+            const listItem = document.createElement('li')
+            //listItem.innerText = document.getElementById("carInput").value
+            const carSearch = document.getElementById("carInput").value.toUpperCase().trim()
+            carList.push(carSearch)
+            listItem.innerText = carSearch
+            listEle.appendChild(listItem)
+            document.getElementById("carInput").value = ''
+        })
+
+        
+
+
+        // API Requests //
         const method = 'Get',
         url = 'https://enterpriseservice.pullapart.com/Location'
         const data = {
