@@ -14,21 +14,7 @@
 
     </ul>
     <script>
-        console.log('hello world')
         const carList = []
-        document.getElementById("addButton").addEventListener('click', () => {
-            const listEle = document.getElementById("carList")
-            const listItem = document.createElement('li')
-            //listItem.innerText = document.getElementById("carInput").value
-            const carSearch = document.getElementById("carInput").value.toUpperCase().trim()
-            carList.push(carSearch)
-            listItem.innerText = carSearch
-            listEle.appendChild(listItem)
-            document.getElementById("carInput").value = ''
-        })
-
-        
-
 
         // API Requests //
         const method = 'Get',
@@ -40,31 +26,38 @@
             search: null
         }
         let makeID = null
+        const BODY_PARAMETERS = {"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
 
-        // xhrLocation = new XMLHttpRequest();
-        // xhrLocation.onreadystatechange = function() {
-        //     if (this.readyState == 4 && this.status == 200) {
-        //         const locationData = JSON.parse(xhrLocation.responseText)
-        //         console.log('found Location data')
-        //         console.dir(locationData)
-        //         data.location = locationData               
-        //     }
-        // }
-        // xhrLocation.open('Get', 'https://enterpriseservice.pullapart.com/Location')
-        // xhrLocation.send()
 
         getLocationDataWithPromise().then(locationData => {
             data.location = locationData
             console.log('Found LOCATION DATA:')
             console.dir(data.location)
-        })
-
+        });
+        
         getMakeDataWithPromise().then(makeData => {
             data.make = makeData
             console.log('Found MAKE DATA:')
             console.dir(data.make)
+        });
+
+
+        document.getElementById("addButton").addEventListener('click', () => {
+            const listEle = document.getElementById("carList")
+            const listItem = document.createElement('li')
+            //listItem.innerText = document.getElementById("carInput").value
+            const carSearch = document.getElementById("carInput").value.toUpperCase().trim()
+            carList.push(carSearch)
+            listItem.innerText = carSearch
+            listEle.appendChild(listItem)
+            document.getElementById("carInput").value = ''
+            const split = carList[0].split(' ')
+            const searchYear = split[0]
+            const searchMake = split[1]
+            const searchModel = split[2]
+            //console.log(searchYear, searchMake, searchModel)
             
-            
+
             // Find the makeID for TOYOTA
             for (let e of data.make) {
                 if (e.makeName == 'TOYOTA') {
@@ -73,20 +66,21 @@
                     break
                 }
             }
-
             getModelDataWithPromise(makeID).then(modelData => {
                 data.model = modelData
                 console.log('Found MODEL DATA:')
                 console.dir(data.model)
             })
+            searchCar(BODY_PARAMETERS, makeID).then(searchResponse => {
+                console.log('DONE WITH CAR SEARCH!')
+                console.dir(searchResponse)
+            })
         })
 
-        const BODY_PARAMETERS = {"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
+        
 
-        searchCar(BODY_PARAMETERS, makeID).then(searchResponse => {
-            console.log('DONE WITH CAR SEARCH!')
-            console.dir(searchResponse)
-        })
+
+        
         
 
         /////////////// FUNCTIONS ///////////////////////////////////////
