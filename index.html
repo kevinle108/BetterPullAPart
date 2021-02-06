@@ -23,11 +23,11 @@
             location: null,
             make: null,
             model: null,
-            search: null
+            search: null,
+            makeID: null,
+            modelID: null
         }
-        let makeID = null
-        let modelID = null
-        const BODY_PARAMETERS = {"Locations":["8"],"Models":["861"],"MakeID":makeID,"Years":[]}
+        
 
 
         getLocationDataWithPromise().then(locationData => {
@@ -63,28 +63,40 @@
             for (let e of data.make) {
                 if (e.makeName == searchMake) {
                     console.log(`${searchMake}'s makeID is ${e.makeID}`)
-                    makeID = e.makeID
+                    data.makeID = e.makeID
                     break
                 }
             }
+            let makeID = data.makeID
+            
+            
             getModelDataWithPromise(makeID).then(modelData => {
                 data.model = modelData
                 console.log('Found MODEL DATA:')
                 console.dir(data.model)
 
-                // Find the makeID for TOYOTA
+                // Find the modelID for TOYOTA
                 for (let e of data.model) {
                     if (e.modelName == searchModel) {
                         console.log(`${searchModel}'s modelID is ${e.modelID}`)
-                        modelID = e.modelID
+                        data.modelID = e.modelID
                         break
                     }
                 }
-            })
-            searchCar(BODY_PARAMETERS, makeID).then(searchResponse => {
+                let modelID = data.modelID
+
+                const BODY_PARAMETERS = {
+                "Locations":["8"],
+                "Models":[modelID],
+                "MakeID": makeID,
+                "Years":[2000]
+                }
+                searchCar(BODY_PARAMETERS, makeID).then(searchResponse => {
                 console.log('DONE WITH CAR SEARCH!')
                 console.dir(searchResponse)
+                })
             })
+            
         })
 
         
@@ -148,7 +160,7 @@
                 }
                 xhr.open('POST', 'https://inventoryservice.pullapart.com/Vehicle/Search', true)
                 xhr.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
-                xhr.send(JSON.stringify({"Locations":["8"],"Models":[string.parse(modelID)],"MakeID":makeID,"Years":[]}));   
+                xhr.send(JSON.stringify(bodyParameters));   
                 
                 // xmlhttp.setRequestHeader("Content-Type", "application/json;charset=UTF-8");
                 // xmlhttp.send(JSON.stringify({ "email": "hello@user.com", "response": { "name": "Tester" } }));                
