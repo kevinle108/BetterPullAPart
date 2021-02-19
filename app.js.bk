@@ -178,3 +178,17 @@ console.log('hello world')
         //     xhrModel.open('Get', 'https://inventoryservice.pullapart.com/Model?makeID='+makeID)
         //     xhrModel.send()
         // }
+
+FETCH SEARCH
+let _data = {
+    Locations: [8],
+    Models: [861], 
+    MakeID: 56,
+    Years: []
+  }
+  
+  fetch(searchURL, {
+    method: "POST",
+    body: JSON.stringify(_data),
+    headers: {"Content-type": "application/json; charset=UTF-8"}
+  }).then(response => response.json()).then(json => console.log(json)); 

@@ -12,18 +12,7 @@ const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 
 //{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
 
-let _data = {
-    Locations: ["8"],
-    Models: ["861"], 
-    MakeID: 56,
-    Years: []
-  }
-  
-  fetch(searchURL, {
-    method: "POST",
-    body: JSON.stringify(_data),
-    headers: {"Content-type": "application/json; charset=UTF-8"}
-  }).then(response => response.json()).then(json => console.log(json)); 
+
 
 
 
@@ -32,7 +21,18 @@ addButton.addEventListener("click", () => {
     if (carYearSelect.value === "#" || carMakeSelect.value === "#" || carModelSelect.value === "#") alert("Invalid Car!");
     else 
     {
-
+        let _data = {
+            Locations: [8],
+            Models: [carModelSelect.value], 
+            MakeID: carMakeSelect.value,
+            Years: [carYearSelect.value]
+          }
+          
+          fetch(searchURL, {
+            method: "POST",
+            body: JSON.stringify(_data),
+            headers: {"Content-type": "application/json; charset=UTF-8"}
+          }).then(response => response.json()).then(json => console.log(json));
     }
 });
 
@@ -101,5 +101,6 @@ getData(makeURL)
             year++;
         }
     }
+
 
     
