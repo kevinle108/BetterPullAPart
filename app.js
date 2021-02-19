@@ -2,17 +2,37 @@ const locationID = "18"; // for Louisville
 const locURL = "https://enterpriseservice.pullapart.com/Location";
 const makeURL = "https://inventoryservice.pullapart.com/Make/";
 const modelURL = "https://inventoryservice.pullapart.com/Model?makeID=";
+const searchURL = "https://inventoryservice.pullapart.com/Vehicle/Search";
 const carYearSelect = document.getElementById("carYear");
 const carMakeSelect = document.getElementById("carMake");
 const carModelSelect = document.getElementById("carModel");
 const addButton = document.getElementById("addButton");
 const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 
+
+//{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
+
+let _data = {
+    Locations: ["8"],
+    Models: ["861"], 
+    MakeID: 56,
+    Years: []
+  }
+  
+  fetch(searchURL, {
+    method: "POST",
+    body: JSON.stringify(_data),
+    headers: {"Content-type": "application/json; charset=UTF-8"}
+  }).then(response => response.json()).then(json => console.log(json)); 
+
+
+
+
 addButton.addEventListener("click", () => {
     if (carYearSelect.value === "#" || carMakeSelect.value === "#" || carModelSelect.value === "#") alert("Invalid Car!");
     else 
     {
-        
+
     }
 });
 
