@@ -1,4 +1,4 @@
-const locationID = "18"; // for Louisville
+const locationID = "8"; // for Louisville
 const locURL = "https://enterpriseservice.pullapart.com/Location";
 const makeURL = "https://inventoryservice.pullapart.com/Make/";
 const modelURL = "https://inventoryservice.pullapart.com/Model?makeID=";
@@ -22,17 +22,39 @@ addButton.addEventListener("click", () => {
     else 
     {
         let _data = {
-            Locations: [8],
+            Locations: [locationID],
             Models: [carModelSelect.value], 
             MakeID: carMakeSelect.value,
             Years: [carYearSelect.value]
           }
-          
+          console.log(_data);
           fetch(searchURL, {
             method: "POST",
             body: JSON.stringify(_data),
             headers: {"Content-type": "application/json; charset=UTF-8"}
-          }).then(response => response.json()).then(json => console.log(json));
+          }).then(response => response.json())
+            .then(json => {
+                // console.log(json[0].exact)
+                if (json[0].exact.length === 0) 
+                {
+                    alert("Sorry, no exact matches for this car!");
+                }
+                else
+                {
+                    for (let match of json[0].exact)
+                    {
+                        const carObj = {
+                            Row: match.row,
+                            Year: match.modelYear,
+                            Make: match.makeName,
+                            Model: match.modelName
+                        }
+                        console.log(carObj);
+                        
+                    }
+                }
+
+            });
     }
 });
 
