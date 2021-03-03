@@ -13,8 +13,21 @@ const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 //{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
 
 
+// populates the year selections with years 1955 - 2020
+buildYearOptions();
 
-
+Promise.all([
+    fetchData(locURL),
+    fetchData(makeURL)
+])
+.then(data => {
+    const locs = data[0];
+    let makes = data[1];
+    // console.log('locations:', locs);
+    // console.log('makes:', makes);
+    makes = makes.sort((a, b) => a.makeName < b.makeName ? -1 : 1); // sorts makes by ABC order
+    generateOptions(makes);
+});
 
 
 addButton.addEventListener("click", () => {
@@ -60,7 +73,7 @@ addButton.addEventListener("click", () => {
 
 carMakeSelect.addEventListener("change", e => {
     const makeId = e.target.value;
-    getData(modelURL + makeId)
+    fetchData(modelURL + makeId)
         .then(modelJson => {
             modelJson = modelJson.sort((a, b) => a.modelName < b.modelName ? -1 : 1); // sorts makes by ABC order
             carModelSelect.innerHTML = ""; // resets the options
@@ -76,25 +89,7 @@ carMakeSelect.addEventListener("change", e => {
         });
 })
 
-// populates the year selections with years 1955 - 2020
-buildYearOptions();
 
-// getData(locURL);
-
-
-getData(makeURL)
-    .then(makeJson => {
-        makeJson = makeJson.sort((a, b) => a.makeName < b.makeName ? -1 : 1); // sorts makes by ABC order
-        for (let make of makeJson)
-        {
-            let txt = optionHtml;
-            txt = txt
-                .replace("{VALUE}", make.makeID)
-                .replace("{OPTION}", make.makeName);
-            //console.log(text);
-            carMakeSelect.insertAdjacentHTML("beforeend", txt);
-        }
-    });
 
 
 
@@ -103,26 +98,43 @@ getData(makeURL)
 
 //// FUNCTIONS ////
 
+function generateOptions(makes) {
+    let html = "";
+    makes.forEach(make => html += optionHtml.replace("{VALUE}", make.makeID).replace("{OPTION}", make.makeName));
+    carMakeSelect.innerHTML = html;
+}
 
+function fetchData(url) 
+{
+    return fetch(url)
+        .then(res => res.json())
+        .catch(err => console.log('Looks like there was a problem', err));
+} 
 
-    async function getData(url) 
+function buildYearOptions()
+{
+    let year = 1995;
+    while (year != 2021)
     {
-        const response = await fetch(url);
-        const json = await response.json();
-        return json;
-    } 
-
-    function buildYearOptions()
-    {
-        let year = 1995;
-        while (year != 2021)
-        {
-            let txt = optionHtml;
-            txt = txt.replace("{VALUE}", year).replace("{OPTION}", year);
-            carYearSelect.insertAdjacentHTML("beforeend", txt);
-            year++;
-        }
+        let txt = optionHtml;
+        txt = txt.replace("{VALUE}", year).replace("{OPTION}", year);
+        carYearSelect.insertAdjacentHTML("beforeend", txt);
+        year++;
     }
+}
 
+
+// function checkStatus(res) 
+// {
+//     // rsp.ok ? new Promise.resolve(rsp) : new Promise.reject(new Error(rsp.statusText)) 
+//     if (res.ok) 
+//     {
+//         return new Promise.resolve(res);
+//     }
+//     else 
+//     {
+//         return new Promise.reject(new Error(res.statusText)); 
+//     }
+// }
 
     
