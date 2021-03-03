@@ -67,6 +67,8 @@ addButton.addEventListener("click", () => {
     if (carYearSelect.value === "#" || carMakeSelect.value === "#" || carModelSelect.value === "#") alert("Invalid Car!");
     else 
     {
+        const carString = `${carYearSelect.value} ${carMakeSelect[0].text} ${carModelSelect.value}`;
+        document.getElementById('carList').insertAdjacentHTML('beforeend', carString);
         let _data = {
             Locations: [locationID],
             Models: [carModelSelect.value], 
