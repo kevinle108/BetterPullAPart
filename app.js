@@ -8,26 +8,13 @@ const carMakeSelect = document.getElementById("carMake");
 const carModelSelect = document.getElementById("carModel");
 const addButton = document.getElementById("addButton");
 const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
+let makeDataSet = [];
+let locationDataSet = [];
 //{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
 
 // --------------------------------------------------------
 //      LOGIC
 // --------------------------------------------------------
-const name = 'Kevin';
-const comment = 'Hello POST World!';
-
-fetch('https://jsonplaceholder.typicode.com/comments', {
-    method: 'POST',
-    headers: {
-        'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({name, comment})
-})
-    .then(data => data.json())
-    .then(json => console.dir(json))
-
-
-
 
 // populates the year selections with years 1955 - 2020
 buildYearOptions();
@@ -41,6 +28,9 @@ Promise.all([
     let makes = data[1];
     // console.log('locations:', locs);
     // console.log('makes:', makes);
+
+    makeDataSet = [...makes];
+
     makes = makes.sort((a, b) => a.makeName < b.makeName ? -1 : 1); // sorts makes by ABC order
     generateOptions(makes);
 });
@@ -67,7 +57,11 @@ addButton.addEventListener("click", () => {
     if (carYearSelect.value === "#" || carMakeSelect.value === "#" || carModelSelect.value === "#") alert("Invalid Car!");
     else 
     {
-        const carString = `${carYearSelect.value} ${carMakeSelect[0].text} ${carModelSelect.value}`;
+        // const makeName = makeDataSet.filter(make => make.makeID == carMakeSelect.value);
+        const makeName = carMakeSelect[carMakeSelect.selectedIndex].text;
+        const modelName = carModelSelect[carModelSelect.selectedIndex].text;
+        
+        const carString = `<li>${carYearSelect.value} ${makeName} ${modelName}</li>`;
         document.getElementById('carList').insertAdjacentHTML('beforeend', carString);
         let _data = {
             Locations: [locationID],
@@ -75,7 +69,6 @@ addButton.addEventListener("click", () => {
             MakeID: carMakeSelect.value,
             Years: [carYearSelect.value]
           }
-          console.log(_data);
           fetch(searchURL, {
             method: "POST",
             headers: {"Content-Type": "application/json; charset=UTF-8"},
