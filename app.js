@@ -10,11 +10,23 @@ const addButton = document.getElementById("addButton");
 const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 //{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
 
-
-
 // --------------------------------------------------------
 //      LOGIC
 // --------------------------------------------------------
+const name = 'Kevin';
+const comment = 'Hello POST World!';
+
+fetch('https://jsonplaceholder.typicode.com/comments', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({name, comment})
+})
+    .then(data => data.json())
+    .then(json => console.dir(json))
+
+
 
 
 // populates the year selections with years 1955 - 2020
@@ -64,8 +76,8 @@ addButton.addEventListener("click", () => {
           console.log(_data);
           fetch(searchURL, {
             method: "POST",
-            body: JSON.stringify(_data),
-            headers: {"Content-type": "application/json; charset=UTF-8"}
+            headers: {"Content-Type": "application/json; charset=UTF-8"},
+            body: JSON.stringify(_data)
           }).then(response => response.json())
             .then(json => {
                 // console.log(json[0].exact)
