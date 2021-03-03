@@ -8,9 +8,13 @@ const carMakeSelect = document.getElementById("carMake");
 const carModelSelect = document.getElementById("carModel");
 const addButton = document.getElementById("addButton");
 const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
-
-
 //{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
+
+
+
+// --------------------------------------------------------
+//      LOGIC
+// --------------------------------------------------------
 
 
 // populates the year selections with years 1955 - 2020
@@ -29,6 +33,23 @@ Promise.all([
     generateOptions(makes);
 });
 
+carMakeSelect.addEventListener("change", e => {
+    const makeId = e.target.value;
+    fetchData(modelURL + makeId)
+        .then(modelJson => {
+            modelJson = modelJson.sort((a, b) => a.modelName < b.modelName ? -1 : 1); // sorts makes by ABC order
+            carModelSelect.innerHTML = ""; // resets the options
+            for (let model of modelJson)
+            {
+                let txt = optionHtml;
+                txt = txt
+                    .replace("{VALUE}", model.modelID)
+                    .replace("{OPTION}", model.modelName);
+                //console.log(text);
+                carModelSelect.insertAdjacentHTML("beforeend", txt);
+            }
+        });
+})
 
 addButton.addEventListener("click", () => {
     if (carYearSelect.value === "#" || carMakeSelect.value === "#" || carModelSelect.value === "#") alert("Invalid Car!");
@@ -71,32 +92,10 @@ addButton.addEventListener("click", () => {
     }
 });
 
-carMakeSelect.addEventListener("change", e => {
-    const makeId = e.target.value;
-    fetchData(modelURL + makeId)
-        .then(modelJson => {
-            modelJson = modelJson.sort((a, b) => a.modelName < b.modelName ? -1 : 1); // sorts makes by ABC order
-            carModelSelect.innerHTML = ""; // resets the options
-            for (let model of modelJson)
-            {
-                let txt = optionHtml;
-                txt = txt
-                    .replace("{VALUE}", model.modelID)
-                    .replace("{OPTION}", model.modelName);
-                //console.log(text);
-                carModelSelect.insertAdjacentHTML("beforeend", txt);
-            }
-        });
-})
 
-
-
-
-
-
-
-
-//// FUNCTIONS ////
+// --------------------------------------------------------
+//      FUNCTIONS
+// --------------------------------------------------------
 
 function generateOptions(makes) {
     let html = "";
