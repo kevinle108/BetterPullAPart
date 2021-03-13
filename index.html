@@ -7,35 +7,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="wrapper">
-        <div id="inputWrap">
-            <select name="carYear" id="carYear">
-                <option value="#">Year</option>
-            </select>
-            <select name="carMake" id="carMake">
-                <option value="#">Make</option>
-            </select>
-            <select name="carModel" id="carModel">
-                <option value="#">Model</option>
-            </select>
-            <button id="addButton">ADD</button>
-        
-            <div id="carList"></div>        
-        </div>
-        
-        
-        <div id="lotTable" class="table">
-            <div class="row header">
-                <div class="cell">Lot</div>
-                <div class="cell">Car</div>
+    <main>
+        <div class="wrapper">
+            <h1 id="mainBanner">Better Pull-A-Part Search</h1>
+            <div id="inputWrap">
+                <select name="carYear" id="carYear" aria-label="Year">
+                    <option value="#">Year</option>
+                </select>
+                <select name="carMake" id="carMake" aria-label="Make">
+                    <option value="#">Make</option>
+                </select>
+                <select name="carModel" id="carModel" aria-label="Model">
+                    <option value="#">Model</option>
+                </select>                        
             </div>
-            <!-- <div class="row">
-                <div class="cell" data-title="Lot"><input type="checkbox">Lot #</div>
-                <div class="cell" data-title="Car">Year Make Model</div>
-            </div> -->
-
+            <button id="addButton">ADD</button>            
+            <div id="carList"></div>
+            <div id="tableWrap">
+                <div id="lotTable" class="table">
+                    <div class="row header">
+                        <div class="cell">Lot</div>
+                        <div class="cell">Car</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </main>
     
 
     <script src="app.js"></script>
