@@ -10,10 +10,10 @@ const addButton = document.getElementById("addButton");
 const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 let makeDataSet = [];
 let locationDataSet = [];
-let matchDataset = {
+let dataset = {
 
   // used for preventing duplicate searches of the same car
-  searchEntries: ['2000 TOYOTA AVALON', '1999 HONDA ODYSESSY'],
+  searchEntries: [],
   
   // an array of lot locations, used for sorting by row number
   lotLocations: 
@@ -42,7 +42,7 @@ carMakeSelect.addEventListener("change", (e) => {
       let txt = optionHtml;
       txt = txt
         .replace("{VALUE}", model.modelID)
-        .replace("{OPTION}", model.modelName);
+        .replace("{OPTION}", model.modelName.toUpperCase());
       //console.log(text);
       carModelSelect.insertAdjacentHTML("beforeend", txt);
     }
@@ -75,20 +75,25 @@ addButton.addEventListener("click", () => {
       .then((response) => response.json())
       .then((json) => {
         const result = searchDataFromJson(json);
-        if (result.exactMatches.length == 0 && result.closeMatches == 0) {
+        if (result.exactMatches.length == 0) {
           alert("Sorry, no matches found for this car!");
         } else {
-          console.log(result)
-          const carEntryHtml = `
-                        <div class="carEntry">
-                            <div class="carName">${carYearSelect.value} ${makeName} ${modelName}</div>
-                            <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
-                            <div class="matchCount">Close Matches: <div class="matchNum">${result.closeMatches.length}</div></div>
-                        </div>
-                        `;
-
-          document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml);
-          document.getElementById('lotTable').insertAdjacentHTML('beforeend', buildCarRows(result))
+          const carName = `${carYearSelect.value} ${makeName} ${modelName}`;
+          // check if this car has already added to searchEntries
+          if (dataset.searchEntries.find(entry => entry === carName)) {
+            alert('This car is already in there!')
+          } else {
+            dataset.searchEntries.push(carName);
+            const carEntryHtml = `
+                          <div class="carEntry">
+                              <div class="carName">${carName}</div>
+                              <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
+                          </div>
+                          `;
+  
+            document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml);
+            document.getElementById('lotTable').insertAdjacentHTML('beforeend', buildCarRows(result))
+          }
 
         }
 
@@ -114,9 +119,12 @@ addButton.addEventListener("click", () => {
 
 
 function buildMakeOptions() {
-  Promise.all([fetchData(locURL), fetchData(makeURL)]).then((data) => {
-    const locs = data[0];
-    let makes = data[1];
+  Promise.all([
+    // fetchData(locURL), 
+    fetchData(makeURL)
+  ]).then((data) => {
+    // const locs = data[0];
+    let makes = data[0];
     makeDataSet = [...makes];
     makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
     generateOptions(makes);
@@ -125,12 +133,6 @@ function buildMakeOptions() {
 
 function buildCarRows(searchResult) {
   let txt = '';
-  const rowHtml = `
-          <div class="row">
-                <div class="cell" data-title="Lot"><input type="checkbox">{LOT_NUMBER}</div>
-                <div class="cell" data-title="Car">{CAR_NAME}</div>
-          </div>          
-          `
   searchResult.exactMatches.forEach(match => {
     txt += `
     <div class="row">
@@ -155,7 +157,7 @@ function generateOptions(makes) {
     (make) =>
       (html += optionHtml
         .replace("{VALUE}", make.makeID)
-        .replace("{OPTION}", make.makeName))
+        .replace("{OPTION}", make.makeName.toUpperCase()))
   );
   carMakeSelect.innerHTML = html;
 }
