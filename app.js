@@ -76,17 +76,18 @@ addButton.addEventListener("click", () => {
         if (result.exactMatches.length == 0 && result.closeMatches == 0) {
           alert("Sorry, no matches found for this car!");
         } else {
-          const listItem = `
+          console.log(result)
+          const carEntryHtml = `
                         <div class="carEntry">
                             <div class="carName">${carYearSelect.value} ${makeName} ${modelName}</div>
                             <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
                             <div class="matchCount">Close Matches: <div class="matchNum">${result.closeMatches.length}</div></div>
                         </div>
-                            
                         `;
-          document
-            .getElementById("carList")
-            .insertAdjacentHTML("beforeend", listItem);
+
+          document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml);
+          document.getElementById('lotTable').insertAdjacentHTML('beforeend', buildCarRows(result))
+
         }
 
         // for (let match of json[0].exact)
@@ -107,6 +108,25 @@ addButton.addEventListener("click", () => {
 // --------------------------------------------------------
 //      FUNCTIONS
 // --------------------------------------------------------
+
+function buildCarRows(searchResult) {
+  let txt = '';
+  const rowHtml = `
+          <div class="row">
+                <div class="cell" data-title="Lot"><input type="checkbox">{LOT_NUMBER}</div>
+                <div class="cell" data-title="Car">{CAR_NAME}</div>
+          </div>          
+          `
+  searchResult.exactMatches.forEach(match => {
+    txt += `
+    <div class="row">
+          <div class="cell" data-title="Lot"><input type="checkbox">${match.row}</div>
+          <div class="cell" data-title="Car">${match.modelYear} ${match.makeName} ${match.modelName}</div>
+    </div>          
+    `
+  });
+  return txt;
+}
 
 function searchDataFromJson(json) {
   return {
