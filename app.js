@@ -109,11 +109,11 @@ addButton.addEventListener("click", () => {
 
 function displayCarEntry(carName, result) {
   const carEntryHtml = `
-                          <div class="carEntry">
-                              <div class="carName">${carName}</div>
-                              <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
-                          </div>
-                          `;
+  <div class="carEntry">
+      <div class="carName">${carName}</div>
+      <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
+  </div>
+  `;
   document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml);
 }
 
@@ -122,12 +122,16 @@ function rebuildSortedTable(dataset) {
   let sortedLots = '<div class="row header"><div class="cell">Lot</div><div class="cell">Car</div></div>';
   dataset.lotLocations.sort((a, b) => a.row < b.row ? -1 : 1).forEach(lotItem => {
     sortedLots +=
-      `
-              <div class="row">
-                <div class="cell lotValue" data-title="Lot">${lotItem.row}</div>
-                <div class="cell" data-title="Car">${lotItem.modelYear} ${lotItem.makeName} ${lotItem.modelName}</div>
-              </div>
-              `;
+    `
+    <div class="row">
+      <div class="cell lotValue" data-title="Lot">
+        <label>
+          <input type="checkbox">${lotItem.row}
+        </label>        
+      </div>
+      <div class="cell" data-title="Car">${lotItem.modelYear} ${lotItem.makeName} ${lotItem.modelName}</div>
+    </div>
+    `;
   });
   document.getElementById('lotTable').innerHTML = sortedLots;
 }
