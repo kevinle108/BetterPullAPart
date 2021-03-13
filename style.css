@@ -84,11 +84,12 @@ body {
   }
 }
 .cell {
-  /* padding: 6px; */
+  padding: 6px;
   display: table-cell;
   border: 1px solid black;
   vertical-align: middle;
   text-align: center;
+  font-size: 20px;
 }
 
 @media screen and (max-width: 500px) {
@@ -97,7 +98,10 @@ body {
     display: block;
   }
 }
-
+.lotValue {
+  font-weight: bold;
+  
+}
 /* End Table Styles */
 
 #inputWrap {

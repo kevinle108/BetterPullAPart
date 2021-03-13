@@ -90,9 +90,9 @@ addButton.addEventListener("click", () => {
                               <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
                           </div>
                           `;
-  
+            result.exactMatches.forEach(match => dataset.lotLocations.push({...match}))
             document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml);
-            document.getElementById('lotTable').insertAdjacentHTML('beforeend', buildCarRows(result))
+            rebuildSortedTable(dataset);
           }
 
         }
@@ -113,6 +113,21 @@ addButton.addEventListener("click", () => {
 });
 
 
+function rebuildSortedTable(dataset) {
+  document.getElementById('lotTable').innerHTML = '';
+  let sortedLots = '<div class="row header"><div class="cell">Lot</div><div class="cell">Car</div></div>';
+  dataset.lotLocations.sort((a, b) => a.row < b.row ? -1 : 1).forEach(lotItem => {
+    sortedLots +=
+      `
+              <div class="row">
+                <div class="cell lotValue" data-title="Lot">${lotItem.row}</div>
+                <div class="cell" data-title="Car">${lotItem.modelYear} ${lotItem.makeName} ${lotItem.modelName}</div>
+              </div>
+              `;
+  });
+  document.getElementById('lotTable').innerHTML = sortedLots;
+}
+
 // --------------------------------------------------------
 //      FUNCTIONS
 // --------------------------------------------------------
@@ -131,17 +146,8 @@ function buildMakeOptions() {
   });
 }
 
-function buildCarRows(searchResult) {
-  let txt = '';
-  searchResult.exactMatches.forEach(match => {
-    txt += `
-    <div class="row">
-          <div class="cell" data-title="Lot"><input type="checkbox">${match.row}</div>
-          <div class="cell" data-title="Car">${match.modelYear} ${match.makeName} ${match.modelName}</div>
-    </div>          
-    `
-  });
-  return txt;
+function buildTableRow(lotLocation) {
+  return `<div class="row"><div class="cell" data-title="Lot"><input type="checkbox">${lotLocation.row}</div><div class="cell" data-title="Car">${lotLocation.modelYear} ${lotLocation.makeName} ${lotLocation.modelName}</div></div>`
 }
 
 function searchDataFromJson(json) {
