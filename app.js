@@ -10,7 +10,20 @@ const addButton = document.getElementById("addButton");
 const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 let makeDataSet = [];
 let locationDataSet = [];
+let matchDataset = {
+
+  // used for preventing duplicate searches of the same car
+  searchEntries: ['2000 TOYOTA AVALON', '1999 HONDA ODYSESSY'],
+  
+  // an array of lot locations, used for sorting by row number
+  lotLocations: 
+  [
+    // will have a lotLocation
+  ],
+
+}
 //{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
+
 
 // --------------------------------------------------------
 //      LOGIC
@@ -18,18 +31,7 @@ let locationDataSet = [];
 
 // populates the year selections with years 1955 - 2020
 buildYearOptions();
-
-Promise.all([fetchData(locURL), fetchData(makeURL)]).then((data) => {
-  const locs = data[0];
-  let makes = data[1];
-  // console.log('locations:', locs);
-  // console.log('makes:', makes);
-
-  makeDataSet = [...makes];
-
-  makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
-  generateOptions(makes);
-});
+document.getElementById('carMake').addEventListener('click', buildMakeOptions, {once : true});
 
 carMakeSelect.addEventListener("change", (e) => {
   const makeId = e.target.value;
@@ -105,9 +107,21 @@ addButton.addEventListener("click", () => {
   }
 });
 
+
 // --------------------------------------------------------
 //      FUNCTIONS
 // --------------------------------------------------------
+
+
+function buildMakeOptions() {
+  Promise.all([fetchData(locURL), fetchData(makeURL)]).then((data) => {
+    const locs = data[0];
+    let makes = data[1];
+    makeDataSet = [...makes];
+    makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
+    generateOptions(makes);
+  });
+}
 
 function buildCarRows(searchResult) {
   let txt = '';
