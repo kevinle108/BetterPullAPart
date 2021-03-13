@@ -4,25 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PullAPart</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- <label>Car:
-        <input type="text" id="carInput">
-    </label>
-    <button id="addButton">Add</button> -->
+    <div class="wrapper">
+        <div id="inputWrap">
+            <select name="carYear" id="carYear">
+                <option value="#">Year</option>
+            </select>
+            <select name="carMake" id="carMake">
+                <option value="#">Make</option>
+            </select>
+            <select name="carModel" id="carModel">
+                <option value="#">Model</option>
+            </select>
+            <button id="addButton">Add</button>
+        
+            <div id="carList"></div>        
+        </div>
+        
+        
+        <div class="table">
+            <div class="row header">
+                <div class="cell">Lot</div>
+                <div class="cell">Car</div>
+            </div>
+    
+            <div class="row">
+                <div class="cell" data-title="Lot"><input type="checkbox">342</div>
+                <div class="cell" data-title="Car">2000 Toyota Avalon</div>
+            </div>
+            <div class="row">
+                <div class="cell" data-title="Lot"><input type="checkbox">362</div>
+                <div class="cell" data-title="Car">2000 Toyota Avalon</div>
+            </div>
+            <div class="row">
+                <div class="cell" data-title="Lot"><input type="checkbox">372</div>
+                <div class="cell" data-title="Car">2000 Toyota Avalon</div>
+            </div>
+        </div>
+    </div>
+    
 
-    <select name="carYear" id="carYear">
-        <option value="#">Year</option>
-    </select>
-    <select name="carMake" id="carMake">
-        <option value="#">Make</option>
-    </select>
-    <select name="carModel" id="carModel">
-        <option value="#">Model</option>
-    </select>
-    <button id="addButton">Add</button>
-
-    <ul id="carList"></ul>
     <script src="app.js"></script>
 </body>
 </html>
