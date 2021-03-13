@@ -84,14 +84,8 @@ addButton.addEventListener("click", () => {
             alert('This car is already in there!')
           } else {
             dataset.searchEntries.push(carName);
-            const carEntryHtml = `
-                          <div class="carEntry">
-                              <div class="carName">${carName}</div>
-                              <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
-                          </div>
-                          `;
             result.exactMatches.forEach(match => dataset.lotLocations.push({...match}))
-            document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml);
+            displayCarEntry(carName, result);
             rebuildSortedTable(dataset);
           }
 
@@ -112,6 +106,16 @@ addButton.addEventListener("click", () => {
   }
 });
 
+
+function displayCarEntry(carName, result) {
+  const carEntryHtml = `
+                          <div class="carEntry">
+                              <div class="carName">${carName}</div>
+                              <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
+                          </div>
+                          `;
+  document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml);
+}
 
 function rebuildSortedTable(dataset) {
   document.getElementById('lotTable').innerHTML = '';
