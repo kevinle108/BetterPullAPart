@@ -43,6 +43,9 @@ body {
   #mainBanner {
     font-size: 2rem;
   }
+  #cityBanner {
+    font-size: 1.5rem;
+  }
 }
 
 .row {
@@ -118,10 +121,10 @@ body {
 }
 
 @media screen and (max-width: 500px) {
-  .cell {
+  /* .cell {
     padding: 2px 16px;
     display: block;
-  }
+  } */
   #inputWrap {
     flex-direction: column;
   }
