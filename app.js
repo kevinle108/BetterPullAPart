@@ -87,6 +87,7 @@ addButton.addEventListener("click", () => {
             result.exactMatches.forEach(match => dataset.lotLocations.push({...match}))
             displayCarEntry(carName, result);
             rebuildSortedTable(dataset);
+            console.log([locationDataSet, makeDataSet, dataset]);
           }
 
         }
@@ -119,7 +120,7 @@ function displayCarEntry(carName, result) {
 
 function rebuildSortedTable(dataset) {
   document.getElementById('lotTable').innerHTML = '';
-  let sortedLots = '<div class="row header"><div class="cell">Lot</div><div class="cell">Car</div></div>';
+  let sortedLots = '<div class="row header"><div class="cell">Lot</div><div class="cell">Year Make Model</div><div class="cell">Date on Yard</div></div>';
   dataset.lotLocations.sort((a, b) => a.row < b.row ? -1 : 1).forEach(lotItem => {
     sortedLots +=
     `
@@ -130,6 +131,7 @@ function rebuildSortedTable(dataset) {
         </label>        
       </div>
       <div class="cell" data-title="Car">${lotItem.modelYear} ${lotItem.makeName} ${lotItem.modelName}</div>
+      <div class="cell" data-title="Car">${formatDate(lotItem.dateYardOn)}</div>
     </div>
     `;
   });
@@ -139,6 +141,16 @@ function rebuildSortedTable(dataset) {
 // --------------------------------------------------------
 //      FUNCTIONS
 // --------------------------------------------------------
+
+function formatDate(dateFromData) {
+  const date = new Date(dateFromData).toDateString().split(' ');
+  // index in date refers to the date's:
+  // [0] - day of week 
+  // [1] - month 
+  // [2] - day
+  // [3] - year
+  return `${date[1]} ${date[3]}`;
+}
 
 
 function buildMakeOptions() {
