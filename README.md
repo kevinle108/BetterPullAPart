@@ -1,8 +1,9 @@
-Better Pull-A-Part
+# Better Pull-A-Part
 
-About: This webapp was created mainly for me to have a better experience when having to search for cars that Pull-A-Part has. The issue I had with car search on Pull-A-Part's website was that it only allows you to search multiple cars for the same make. For example, it will allow you to search for both Honda Civic and Honda Accord, but there is no way to search for both Honda Civic and Toyota Camry. Whenever I am going to the Pull-A-Part's scrapyard, often I am searching for cars of multiple makes. So I created this webapp that will allow users to search for cars of various makes and models and present their lot locations all in one sorted table. This makes going to the Pull-A-Part scrapyard a lot more efficient because you no longer need to pull up several different pages if you want to search for cars of multiple makes.
+## About: 
+This webapp was created mainly for me to have a better experience when having to search for cars that Pull-A-Part has. The issue I had with car search on Pull-A-Part's website was that it only allows you to search multiple cars for the same make. For example, it will allow you to search for both Honda Civic and Honda Accord, but there is no way to search for both Honda Civic and Toyota Camry. Whenever I am going to the Pull-A-Part's scrapyard, often I am searching for cars of multiple makes. So I created this webapp that will allow users to search for cars of various makes and models and present their lot locations all in one sorted table. This makes going to the Pull-A-Part scrapyard a lot more efficient because you no longer need to pull up several different pages if you want to search for cars of multiple makes.
 
-Code Louisville Javascript Project Requirements met:
+## Code Louisville Javascript Project Requirements met:
 	Retrieve data from an external API and display data in your app (such as with fetch() or with AJAX)
 		-Make several fetch GET requests to get a list of all the makes and models available.
 		-Makes a fetch POST request to search for a specific car when the ADD button is clicked.
