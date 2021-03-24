@@ -5,9 +5,9 @@ This webapp was created mainly for me to have a better experience when having to
 
 ## Code Louisville Javascript Project Requirements met:
 - Retrieve data from an external API and display data in your app (such as with fetch() or with AJAX)
-	-Make several fetch GET requests to get a list of all the makes and models available.
-	-Makes a fetch POST request to search for a specific car when the ADD button is clicked.
+	- Make several fetch GET requests to get a list of all the makes and models available.
+	- Makes a fetch POST request to search for a specific car when the ADD button is clicked.
 - Create an array, dictionary or list, populate it with multiple values, retrieve at least one value, and use or display it in your application
-	-Uses an array of objects to store all the search data and build a visual table with it.
+	- Uses an array of objects to store all the search data and build a visual table with it.
 - Visualize data in a graph, chart, or other visual representation of data
-	-Displays the cars and which lot they are located in with a visual table
+	- Displays the cars and which lot they are located in with a visual table
