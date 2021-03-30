@@ -210,6 +210,9 @@ button {
 }
 
 @media screen and (max-width: 580px) {
+  .wrapper {
+    padding: 0;
+  }
   #mainBanner {
     font-size: 1.5rem;
   }
