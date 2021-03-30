@@ -143,13 +143,20 @@ function rebuildSortedTable(dataset) {
 // --------------------------------------------------------
 
 function formatDate(dateFromData) {
-  const date = new Date(dateFromData).toDateString().split(' ');
+  const today = new Date();
+  const carDate = new Date(dateFromData);
+  const diff = today.getTime() - carDate.getTime();
+  const days = Math.ceil(diff / (1000 * 3600 * 24));
+  return `${days} days ago`;
+
+  // Uncomment to just display the exact month and year
+  // const date = new Date(dateFromData).toDateString().split(' ');
   // index in date refers to the date's:
   // [0] - day of week 
   // [1] - month 
   // [2] - day
   // [3] - year
-  return `${date[1]} ${date[3]}`;
+  // return `${date[1]} ${date[3]}`;
 }
 
 
