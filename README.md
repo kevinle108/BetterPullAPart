@@ -1,4 +1,4 @@
-# Better Pull-A-Part
+# Better Pull-A-Part Car Search
 Hosted at: https://kevinle108.github.io/Pull-A-Part/
 
 ## Description:
