@@ -17,7 +17,7 @@ NOTE: At this time, the app only searches cars at Pull-A-Part's Louisville locat
 - Visualize data in a graph, chart, or other visual representation of data
 	- Displays the cars and which lot they are located in with a visual table
 - Calculate and display data based on an external factor (ex: get the current date, and display how many days remaining until some event)
-- 	- Calculates and displays the number of days the car on Pull-A-Part's yard (uses current date and car data obtained from API requests) 
+	- Calculates and displays the number of days the car on Pull-A-Part's yard (uses current date and car data obtained from API requests) 
 
 ## Author
 Kevin Le
