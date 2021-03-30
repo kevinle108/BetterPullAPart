@@ -10,10 +10,7 @@ body {
 }
 
 @media screen and (max-width: 580px) {
-  body {
-    font-size: 16px;
-    line-height: 22px;
-  }
+  
 }
 
 .wrapper {
@@ -34,18 +31,6 @@ body {
 #cityBanner {
   color: white;
   font-size: 2rem;
-}
-
-@media screen and (max-width: 580px) {
-  .table {
-    display: block;
-  }
-  #mainBanner {
-    font-size: 2rem;
-  }
-  #cityBanner {
-    font-size: 1.5rem;
-  }
 }
 
 .row {
@@ -85,32 +70,6 @@ body {
   background: #2980b9;
 }
 
-@media screen and (max-width: 580px) {
-  .row {
-    padding: 14px 0 7px;
-  }
-
-  .row.header {
-    padding: 0;
-    height: 6px;
-  }
-
-  .row .cell {
-    margin-bottom: 10px;
-  }
-
-  .row .cell::before {
-    margin-bottom: 3px;
-    /* content: attr(data-title); */
-    min-width: 98px;
-    line-height: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
-    color: #969696;
-    display: block;
-  }
-}
-
 .cell {
   padding: 6px;
   display: table-cell;
@@ -120,15 +79,7 @@ body {
   font-size: 1.1rem;
 }
 
-@media screen and (max-width: 500px) {
-  /* .cell {
-    padding: 2px 16px;
-    display: block;
-  } */
-  #inputWrap {
-    flex-direction: column;
-  }
-}
+
 .lotValue {
   font-weight: bold;
   
@@ -182,4 +133,80 @@ button {
 .matchNum {
   display: inline;
   font-weight: bold;
+}
+
+@media screen and (max-width: 580px) {
+  body {
+    font-size: 16px;
+    line-height: 22px;
+  }
+
+  #mainBanner {
+    font-size: 2rem;
+  }
+
+  #cityBanner {
+    font-size: 2rem;
+  }
+
+  .carEntry {
+    width: 24rem;
+  }
+  select, .carEntry {
+    /* background-color: transparent;
+    color: white; */
+    font-size: 1.2rem;
+  }
+  .table, select, button {
+    width: 25rem;
+  }
+  #inputWrap {
+    flex-direction: column;
+  }
+  .table {
+    margin-top: 5px;
+  }
+  .cell {
+    padding: 2px 16px;
+    display: block;
+    border: none;
+    text-align: left;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .row {
+    padding: 14px 0 7px;
+  }
+
+  .row.header {
+    padding: 0;
+    height: 6px;
+  }
+
+  .row .cell {
+    margin-bottom: 10px;
+  }
+  .row.header {
+    display: none;
+  }
+  .row .cell::before {
+    margin-bottom: 3px;
+    content: attr(data-title);
+    /* min-width: 90px; */
+    line-height: 10px;
+    margin-right: 10px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #969696;
+    display: inline-block;
+  }
+  .cellCar {
+    text-align: center;
+  }
+  .cellDate {
+    text-align: right;
+  }
+
+
 }

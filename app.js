@@ -130,8 +130,8 @@ function rebuildSortedTable(dataset) {
           <input type="checkbox">${lotItem.row}
         </label>        
       </div>
-      <div class="cell" data-title="Car">${lotItem.modelYear} ${lotItem.makeName} ${lotItem.modelName}</div>
-      <div class="cell" data-title="Car">${formatDate(lotItem.dateYardOn)}</div>
+      <div class="cell cellCar" data-title="Car">${lotItem.modelYear} ${lotItem.makeName} ${lotItem.modelName}</div>
+      <div class="cell cellDate" data-title="Date">${formatDate(lotItem.dateYardOn)}</div>
     </div>
     `;
   });
