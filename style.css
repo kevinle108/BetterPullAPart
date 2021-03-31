@@ -116,12 +116,14 @@ label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
 .carEntry {
   width: 590px;
   border: 1px solid black;
-  text-align: center;
+  /* text-align: center; */
   background-color: lightgray;
   margin: 5px 0;
   padding: 10px;
   font-size: 1.1rem;
   border-radius: 15px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .carName {
@@ -130,6 +132,16 @@ label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
   margin-bottom: 5px;
 }
 
+.carNameWrap {
+  margin-left: 200px;
+}
+
+.closeEntry {
+  color: red;
+}
+.matchCount {
+  margin-left: 20px;
+}
 .matchNum {
   display: inline;
   font-weight: bold;
@@ -228,6 +240,9 @@ label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
   }
   .carEntry {
     width: 19rem;
+  }
+  .carNameWrap {
+    margin-left: 60px;
   }
   .table, select, #addButton {
     width: 20rem;

@@ -117,9 +117,11 @@ function displayCarEntry(carName, result) {
   const idName = carName.split(' ').join('_');
   const carEntryHtml = `
   <div id="${idName}" class="carEntry">
-      <div class="carName">${carName}</div>
-      <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
-      <button id="closeButton_${idName}" class="closeEntry">X</button>
+      <div class="carNameWrap">
+        <div class="carName">${carName}</div>
+        <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
+      </div>
+        <div id="closeButton_${idName}" class="closeEntry">X</button>
   </div>
   `;
   document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml)
