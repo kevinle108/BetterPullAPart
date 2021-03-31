@@ -253,5 +253,8 @@ label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
   .cell {
     font-size: 1rem;
   }
+  .cellCar {
+    text-align: left;
+  }
 
 }
