@@ -101,7 +101,7 @@ select {
   border-radius: 15px;
 }
 
-#addButton:hover, .lotCheckbox:hover {
+label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
   cursor: pointer;
 }
 

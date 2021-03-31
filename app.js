@@ -107,10 +107,6 @@ addButton.addEventListener("click", () => {
   }
 });
 
-
-
-
-
 // --------------------------------------------------------
 //      FUNCTIONS
 // --------------------------------------------------------
@@ -118,13 +114,33 @@ addButton.addEventListener("click", () => {
 
 
 function displayCarEntry(carName, result) {
+  const idName = carName.split(' ').join('_');
   const carEntryHtml = `
-  <div class="carEntry">
+  <div id="${idName}" class="carEntry">
       <div class="carName">${carName}</div>
       <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
+      <button id="closeButton_${idName}" class="closeEntry">X</button>
   </div>
   `;
-  document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml);
+  document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml)
+  document.getElementById(`closeButton_${idName}`).addEventListener('click', (e) => {
+    const carToRemove = e.target.id.split('closeButton_')[1];
+    const split = carToRemove.split('_');
+    const carYear = split[0];
+    const carMake = split[1];
+    const carModel = split[2];
+    console.log([carYear, carMake, carModel]);
+    const filtered = dataset.lotLocations.filter(lot => {
+      return !(lot.modelYear == carYear && lot.makeName == carMake && lot.modelName == carModel);
+    });
+    console.log(filtered);
+    dataset.lotLocations = filtered;
+    rebuildSortedTable(dataset);
+    document.getElementById(carToRemove).remove();
+    dataset.searchEntries = dataset.searchEntries.filter(entry => entry !== split.join(' '));
+  })
+  
+
 }
 
 function rebuildSortedTable(dataset) {
