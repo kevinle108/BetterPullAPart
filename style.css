@@ -9,9 +9,6 @@ body {
   box-sizing: border-box;
 }
 
-@media screen and (max-width: 580px) {
-  
-}
 
 .wrapper {
   display: flex;
@@ -79,11 +76,10 @@ body {
   font-size: 1.1rem;
 }
 
-
-.lotValue {
-  font-weight: bold;
-  
+.lotCheckbox {
+  width: 1rem;
 }
+
 /* End Table Styles */
 
 #inputWrap {
@@ -96,13 +92,17 @@ select {
   padding: 10px;
   width: 200px;
 }
-button {
+#addButton {
   margin-top: 10px;
   width: 200px;
 	height: 50px;
 	font-size: 1.1rem;
   background-color: lightgreen;
   border-radius: 15px;
+}
+
+#addButton:hover, .lotCheckbox:hover {
+  cursor: pointer;
 }
 
 #carList {
@@ -157,7 +157,7 @@ button {
     color: white; */
     font-size: 1.2rem;
   }
-  .table, select, button {
+  .table, select, #addButton {
     width: 25rem;
   }
   #inputWrap {
@@ -172,11 +172,13 @@ button {
     border: none;
     text-align: left;
     font-size: 1.2rem;
-    font-weight: bold;
+    /* font-weight: bold; */
   }
 
   .row {
     padding: 14px 0 7px;
+    font-weight: bold;
+    border-bottom: solid 1px black;
   }
 
   .row.header {
@@ -185,7 +187,7 @@ button {
   }
 
   .row .cell {
-    margin-bottom: 10px;
+    margin: 3px;
   }
   .row.header {
     display: none;
@@ -195,17 +197,21 @@ button {
     content: attr(data-title);
     /* min-width: 90px; */
     line-height: 10px;
-    margin-right: 10px;
-    font-weight: bold;
-    text-transform: uppercase;
+    margin-right: 5px;
+    /* font-weight: bold; */
+    /* text-transform: uppercase; */
     color: #969696;
     display: inline-block;
+  }
+  .lotValue {
+    text-align: left;
   }
   .cellCar {
     text-align: center;
   }
   .cellDate {
     text-align: right;
+    
   }
 }
 
@@ -223,10 +229,10 @@ button {
   .carEntry {
     width: 19rem;
   }
-  .table, select, button {
+  .table, select, #addButton {
     width: 20rem;
   }
-  select, .carEntry, button {
+  select, .carEntry, #addButton {
     font-size: 1rem;
   }
   .cell {

@@ -108,6 +108,15 @@ addButton.addEventListener("click", () => {
 });
 
 
+
+
+
+// --------------------------------------------------------
+//      FUNCTIONS
+// --------------------------------------------------------
+
+
+
 function displayCarEntry(carName, result) {
   const carEntryHtml = `
   <div class="carEntry">
@@ -120,27 +129,43 @@ function displayCarEntry(carName, result) {
 
 function rebuildSortedTable(dataset) {
   document.getElementById('lotTable').innerHTML = '';
-  let sortedLots = '<div class="row header"><div class="cell">Lot</div><div class="cell">Year Make Model</div><div class="cell">Date on Yard</div></div>';
+  let sortedLots = '<div class="row header"><div class="cell">Lot</div><div class="cell">Car</div><div class="cell">Date on Yard</div></div>';
   dataset.lotLocations.sort((a, b) => a.row < b.row ? -1 : 1).forEach(lotItem => {
     sortedLots +=
     `
     <div class="row">
-      <div class="cell lotValue" data-title="Lot">
+      <div class="cell lotValue" data-title="Lot:">
         <label>
-          <input type="checkbox">${lotItem.row}
+          ${lotItem.row}<input type="checkbox" class="lotCheckbox">
         </label>        
       </div>
-      <div class="cell cellCar" data-title="Car">${lotItem.modelYear} ${lotItem.makeName} ${lotItem.modelName}</div>
-      <div class="cell cellDate" data-title="Date">${formatDate(lotItem.dateYardOn)}</div>
+      <div class="cell cellCar" data-title="Car:">${lotItem.modelYear} ${lotItem.makeName} ${lotItem.modelName}</div>
+      <div class="cell cellDate" data-title="Date on Yard:">${formatDate(lotItem.dateYardOn)}</div>
     </div>
     `;
   });
   document.getElementById('lotTable').innerHTML = sortedLots;
+
+  // add click event to checkboxes
+  const checkboxes = document.querySelectorAll('.lotCheckbox');
+  checkboxes.forEach(x => x.addEventListener('change', (e) => {
+    const row = e.currentTarget.parentElement.parentElement.parentElement;
+    if (e.target.checked) {
+      console.log('checked');
+      row.style.textDecoration = 'line-through';
+    }
+    if (!e.target.checked) {
+      console.log('notchecked')
+      row.style.textDecoration = 'none';
+    }
+  }))
 }
 
-// --------------------------------------------------------
-//      FUNCTIONS
-// --------------------------------------------------------
+
+
+
+
+
 
 function formatDate(dateFromData) {
   const today = new Date();
