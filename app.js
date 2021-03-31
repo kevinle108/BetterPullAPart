@@ -245,7 +245,7 @@ function fetchData(url) {
 }
 
 function buildYearOptions() {
-  let year = 1995;
+  let year = 1955;
   while (year != 2021) {
     let txt = optionHtml;
     txt = txt.replace("{VALUE}", year).replace("{OPTION}", year);
