@@ -219,7 +219,7 @@ label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
     text-align: left;
   }
   .cellCar {
-    text-align: center;
+    text-align: left;
   }
   .cellDate {
     text-align: right;
