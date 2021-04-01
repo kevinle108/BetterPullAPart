@@ -9,6 +9,7 @@ const carModelSelect = document.getElementById("carModel");
 const addButton = document.getElementById("addButton");
 const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 let makeDataSet = [];
+let modelDataset = [];
 let locationDataSet = [];
 let dataset = {
 
@@ -31,19 +32,23 @@ let dataset = {
 
 // populates the year selections with years 1955 - 2020
 buildYearOptions();
-document.getElementById('carMake').addEventListener('click', buildMakeOptions, {once : true});
+buildMakeOptions();
+// document.getElementById('carMake').addEventListener('click', buildMakeOptions, {once : true});
 
 carMakeSelect.addEventListener("change", (e) => {
   const makeId = e.target.value;
+  if (makeId == '#') {
+    carModelSelect.innerHTML = `<option value="#">Model</option>`;
+    return;
+  }
   fetchData(modelURL + makeId).then((modelJson) => {
     modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
-    carModelSelect.innerHTML = ""; // resets the options
+    carModelSelect.innerHTML = `<option value="#">Model</option>`; // resets the options
     for (let model of modelJson) {
       let txt = optionHtml;
       txt = txt
         .replace("{VALUE}", model.modelID)
         .replace("{OPTION}", model.modelName.toUpperCase());
-      //console.log(text);
       carModelSelect.insertAdjacentHTML("beforeend", txt);
     }
   });
@@ -55,12 +60,10 @@ addButton.addEventListener("click", () => {
     carMakeSelect.value === "#" ||
     carModelSelect.value === "#"
   )
-    alert("Invalid Car!");
+    alert("Invalid Car Search!\nPlease make sure you select a valid Year, Make, and Model.");
   else {
-    // const makeName = makeDataSet.filter(make => make.makeID == carMakeSelect.value);
     const makeName = carMakeSelect[carMakeSelect.selectedIndex].text;
     const modelName = carModelSelect[carModelSelect.selectedIndex].text;
-
     let _data = {
       Locations: [locationID],
       Models: [carModelSelect.value],
@@ -107,7 +110,7 @@ function displayCarEntry(carName, result) {
         <div class="carName">${carName}</div>
         <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
       </div>
-        <div id="closeButton_${idName}" class="closeEntry" role="button">X</button>
+        <div id="closeButton_${idName}" class="closeEntry" role="button">x</button>
   </div>
   `;
   document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml)
@@ -125,8 +128,6 @@ function displayCarEntry(carName, result) {
     document.getElementById(carToRemove).remove();
     dataset.searchEntries = dataset.searchEntries.filter(entry => entry !== split.join(' '));
   })
-  
-
 }
 
 function rebuildSortedTable(dataset) {
@@ -177,17 +178,40 @@ function formatDate(dateFromData) {
   // return `${date[1]} ${date[3]}`;
 }
 
+// function buildMakeOptions() {
+//   Promise.all([
+//     // fetchData(locURL), 
+//     fetchData(makeURL)
+//   ]).then((data) => {
+//     // const locs = data[0];
+//     let makes = data[0];
+//     makeDataSet = [...makes];
+//     makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
+//     generateOptions(makes);
+//   });
+// }
 
 function buildMakeOptions() {
-  Promise.all([
-    // fetchData(locURL), 
-    fetchData(makeURL)
-  ]).then((data) => {
-    // const locs = data[0];
-    let makes = data[0];
+    fetchData(makeURL).then((data) => {
+    let makes = data;
     makeDataSet = [...makes];
     makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
     generateOptions(makes);
+    // console.log(makeDataSet);
+    // makeDataSet.forEach(make => {
+    //   fetchData(modelURL + make.makeID).then((modelJson) => {
+    //     modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
+    //     let modelsHtml = `<option value="#">Model</option>`; // resets the options
+    //     for (let model of modelJson) {
+    //       let txt = optionHtml;
+    //       txt = txt
+    //         .replace("{VALUE}", model.modelID)
+    //         .replace("{OPTION}", model.modelName.toUpperCase());
+    //       modelsHtml += txt;
+    //     }
+    //     console.log(modelsHtml);
+    //   });
+    // })
   });
 }
 
@@ -203,7 +227,7 @@ function searchDataFromJson(json) {
 }
 
 function generateOptions(makes) {
-  let html = "";
+  let html = `<option value="#">Make</option>`;
   makes.forEach(
     (make) =>
       (html += optionHtml
