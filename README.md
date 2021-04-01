@@ -1,5 +1,5 @@
 # Better Pull-A-Part Car Search
-Hosted at: https://kevinle108.github.io/Pull-A-Part/
+Hosted at: https://kevinle108.github.io/BetterPullAPart/
 
 ## Description:
 A Pull-A-Part Search App that supports multiple cars of different makes!
