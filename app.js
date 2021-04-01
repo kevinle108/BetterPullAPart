@@ -87,22 +87,10 @@ addButton.addEventListener("click", () => {
             result.exactMatches.forEach(match => dataset.lotLocations.push({...match}))
             displayCarEntry(carName, result);
             rebuildSortedTable(dataset);
-            console.log([locationDataSet, makeDataSet, dataset]);
+            // console.log([locationDataSet, makeDataSet, dataset]);
           }
 
         }
-
-        // for (let match of json[0].exact)
-        // {
-        //     const carObj = {
-        //         Row: match.row,
-        //         Year: match.modelYear,
-        //         Make: match.makeName,
-        //         Model: match.modelName
-        //     }
-        //     console.log(carObj);
-
-        // }
       });
   }
 });
@@ -110,8 +98,6 @@ addButton.addEventListener("click", () => {
 // --------------------------------------------------------
 //      FUNCTIONS
 // --------------------------------------------------------
-
-
 
 function displayCarEntry(carName, result) {
   const idName = carName.split(' ').join('_');
@@ -121,7 +107,7 @@ function displayCarEntry(carName, result) {
         <div class="carName">${carName}</div>
         <div class="matchCount">Exact Matches: <div class="matchNum">${result.exactMatches.length}</div></div>
       </div>
-        <div id="closeButton_${idName}" class="closeEntry">X</button>
+        <div id="closeButton_${idName}" class="closeEntry" role="button">X</button>
   </div>
   `;
   document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml)
@@ -131,11 +117,9 @@ function displayCarEntry(carName, result) {
     const carYear = split[0];
     const carMake = split[1];
     const carModel = split[2];
-    console.log([carYear, carMake, carModel]);
     const filtered = dataset.lotLocations.filter(lot => {
       return !(lot.modelYear == carYear && lot.makeName == carMake && lot.modelName == carModel);
     });
-    console.log(filtered);
     dataset.lotLocations = filtered;
     rebuildSortedTable(dataset);
     document.getElementById(carToRemove).remove();
@@ -163,27 +147,18 @@ function rebuildSortedTable(dataset) {
     `;
   });
   document.getElementById('lotTable').innerHTML = sortedLots;
-
   // add click event to checkboxes
   const checkboxes = document.querySelectorAll('.lotCheckbox');
   checkboxes.forEach(x => x.addEventListener('change', (e) => {
     const row = e.currentTarget.parentElement.parentElement.parentElement;
     if (e.target.checked) {
-      console.log('checked');
       row.style.textDecoration = 'line-through';
     }
     if (!e.target.checked) {
-      console.log('notchecked')
       row.style.textDecoration = 'none';
     }
   }))
 }
-
-
-
-
-
-
 
 function formatDate(dateFromData) {
   const today = new Date();
@@ -253,16 +228,3 @@ function buildYearOptions() {
     year++;
   }
 }
-
-// function checkStatus(res)
-// {
-//     // rsp.ok ? new Promise.resolve(rsp) : new Promise.reject(new Error(rsp.statusText))
-//     if (res.ok)
-//     {
-//         return new Promise.resolve(res);
-//     }
-//     else
-//     {
-//         return new Promise.reject(new Error(res.statusText));
-//     }
-// }
