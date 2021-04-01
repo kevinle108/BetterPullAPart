@@ -1,14 +1,12 @@
-/* Start Table Styles */
 body {
-  font-family: Arial, Helvetica, sans-serif;
-  /* font-size: 14px; */
+  /* font-family: Arial, Helvetica, sans-serif; */
+  font-family: 'Open Sans', sans-serif;
   line-height: 20px;
   font-weight: 400;
   color: #3b3b3b;
   background-color: #2b2b2b;
   box-sizing: border-box;
 }
-
 
 .wrapper {
   display: flex;
@@ -79,8 +77,6 @@ body {
 .lotCheckbox {
   width: 1rem;
 }
-
-/* End Table Styles */
 
 #inputWrap {
   text-align: center;
@@ -164,27 +160,29 @@ label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
   .carEntry {
     width: 24rem;
   }
+
   select, .carEntry {
-    /* background-color: transparent;
-    color: white; */
     font-size: 1.2rem;
   }
+
   .table, select, #addButton {
     width: 25rem;
   }
+
   #inputWrap {
     flex-direction: column;
   }
+
   .table {
     margin-top: 5px;
   }
+
   .cell {
     padding: 2px 16px;
     display: block;
     border: none;
     text-align: left;
     font-size: 1.2rem;
-    /* font-weight: bold; */
   }
 
   .row {
@@ -201,29 +199,30 @@ label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
   .row .cell {
     margin: 3px;
   }
+
   .row.header {
     display: none;
   }
+
   .row .cell::before {
     margin-bottom: 3px;
     content: attr(data-title);
-    /* min-width: 90px; */
     line-height: 10px;
     margin-right: 5px;
-    /* font-weight: bold; */
-    /* text-transform: uppercase; */
     color: #969696;
     display: inline-block;
   }
+
   .lotValue {
     text-align: left;
   }
+
   .cellCar {
     text-align: left;
   }
+
   .cellDate {
     text-align: right;
-    
   }
 }
 
@@ -256,5 +255,4 @@ label:hover, #addButton:hover, .lotCheckbox:hover, .closeEntry {
   .cellCar {
     text-align: left;
   }
-
 }
