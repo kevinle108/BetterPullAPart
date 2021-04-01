@@ -10,7 +10,8 @@ const addButton = document.getElementById("addButton");
 const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 let makeDataSet = [];
 let modelDataset = [];
-let locationDataSet = [];
+let modelHtmlSet = [];
+// let locationDataSet = []; for future implementation to support more locations besides Louisville
 let dataset = {
 
   // used for preventing duplicate searches of the same car
@@ -35,23 +36,33 @@ buildYearOptions();
 buildMakeOptions();
 // document.getElementById('carMake').addEventListener('click', buildMakeOptions, {once : true});
 
+// carMakeSelect.addEventListener("change", (e) => {
+//   const makeId = e.target.value;
+//   if (makeId == '#') {
+//     carModelSelect.innerHTML = `<option value="#">Model</option>`;
+//     return;
+//   }
+//   fetchData(modelURL + makeId).then((modelJson) => {
+//     modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
+//     carModelSelect.innerHTML = `<option value="#">Model</option>`; // resets the options
+//     for (let model of modelJson) {
+//       let txt = optionHtml;
+//       txt = txt
+//         .replace("{VALUE}", model.modelID)
+//         .replace("{OPTION}", model.modelName.toUpperCase());
+//       carModelSelect.insertAdjacentHTML("beforeend", txt);
+//     }
+//   });
+// });
+
 carMakeSelect.addEventListener("change", (e) => {
   const makeId = e.target.value;
   if (makeId == '#') {
     carModelSelect.innerHTML = `<option value="#">Model</option>`;
     return;
   }
-  fetchData(modelURL + makeId).then((modelJson) => {
-    modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
-    carModelSelect.innerHTML = `<option value="#">Model</option>`; // resets the options
-    for (let model of modelJson) {
-      let txt = optionHtml;
-      txt = txt
-        .replace("{VALUE}", model.modelID)
-        .replace("{OPTION}", model.modelName.toUpperCase());
-      carModelSelect.insertAdjacentHTML("beforeend", txt);
-    }
-  });
+  const modelOptions = modelHtmlSet.find(ele => ele[0] == makeId)[1];
+  carModelSelect.innerHTML = modelOptions;
 });
 
 addButton.addEventListener("click", () => {
@@ -92,7 +103,6 @@ addButton.addEventListener("click", () => {
             rebuildSortedTable(dataset);
             // console.log([locationDataSet, makeDataSet, dataset]);
           }
-
         }
       });
   }
@@ -197,21 +207,24 @@ function buildMakeOptions() {
     makeDataSet = [...makes];
     makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
     generateOptions(makes);
-    // console.log(makeDataSet);
-    // makeDataSet.forEach(make => {
-    //   fetchData(modelURL + make.makeID).then((modelJson) => {
-    //     modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
-    //     let modelsHtml = `<option value="#">Model</option>`; // resets the options
-    //     for (let model of modelJson) {
-    //       let txt = optionHtml;
-    //       txt = txt
-    //         .replace("{VALUE}", model.modelID)
-    //         .replace("{OPTION}", model.modelName.toUpperCase());
-    //       modelsHtml += txt;
-    //     }
-    //     console.log(modelsHtml);
-    //   });
-    // })
+    console.log(makeDataSet);
+    makeDataSet.forEach(make => {
+      fetchData(modelURL + make.makeID).then((modelJson) => {
+        modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
+        let modelsHtml = `<option value="#">Model</option>`; // resets the options
+        for (let model of modelJson) {
+          let txt = optionHtml;
+          txt = txt
+            .replace("{VALUE}", model.modelID)
+            .replace("{OPTION}", model.modelName.toUpperCase());
+          modelsHtml += txt;
+        }
+        // console.log(modelsHtml);
+        const model = [make.makeID, modelsHtml];
+        modelHtmlSet.push(model);
+      });      
+    })
+    console.dir(modelHtmlSet); 
   });
 }
 
