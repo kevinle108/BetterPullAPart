@@ -20,6 +20,9 @@ NOTE: At this time, the app only searches cars at Pull-A-Part's Louisville locat
 	- Calculates and displays the number of days the car on Pull-A-Part's yard (uses current date and car data obtained from API requests)
 
 ## Special Thanks:
+- Sometimes the expanded dropdown menus for Year, Make, and Model will close prematurely. This might be due to the large number of the options in each dropdown. 
+
+## Special Thanks:
 - Code Louisville (especially mentors Michael & Izaak) for the programming knowledge  
 - Michael for showing me how to find the API calls, this project wouldn't have been possible without you!
 - Han and Rick for helping me test and fix some issues with the application.

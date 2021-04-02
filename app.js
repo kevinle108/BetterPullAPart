@@ -138,7 +138,10 @@ function rebuildSortedTable(dataset) {
     `;
   });
   document.getElementById('lotTable').innerHTML = sortedLots;
-  // add click event to checkboxes to strikethru the row
+  addClickEventsToLotCheckboxes();
+}
+
+function addClickEventsToLotCheckboxes() {
   const checkboxes = document.querySelectorAll('.lotCheckbox');
   checkboxes.forEach(x => x.addEventListener('change', (e) => {
     const row = e.currentTarget.parentElement.parentElement.parentElement;
@@ -148,7 +151,7 @@ function rebuildSortedTable(dataset) {
     if (!e.target.checked) {
       row.style.textDecoration = 'none';
     }
-  }))
+  }));
 }
 
 function formatDate(dateFromData) {
