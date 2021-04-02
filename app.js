@@ -133,6 +133,29 @@ function addClickEventListenerToAddButton() {
   });
 }
 
+function formatDate(dateFromData) {
+  const today = new Date();
+  const carDate = new Date(dateFromData);
+  const diff = today.getTime() - carDate.getTime();
+  const days = Math.ceil(diff / (1000 * 3600 * 24));
+  return `${days} days ago`;
+  // Uncomment to just display the exact month and year
+  // const date = new Date(dateFromData).toDateString().split(' ');
+  // index in date refers to the date's:
+  // [0] - day of week 
+  // [1] - month 
+  // [2] - day
+  // [3] - year
+  // return `${date[1]} ${date[3]}`;
+}
+
+function searchDataFromJson(json) {
+  return {
+    exactMatches: [...json[0].exact],
+    closeMatches: [...json[0].other],
+  };
+}
+
 function displayCarEntry(carName, result) {
   const idName = carName.split(' ').join('_');
   const carEntryHtml = `
@@ -161,6 +184,10 @@ function displayCarEntry(carName, result) {
   })
 }
 
+function buildTableRow(lotLocation) {
+  return `<div class="row"><div class="cell" data-title="Lot"><input type="checkbox">${lotLocation.row}</div><div class="cell" data-title="Car">${lotLocation.modelYear} ${lotLocation.makeName} ${lotLocation.modelName}</div></div>`
+}
+
 function buildSortedTable(dataset) {
   document.getElementById('lotTable').innerHTML = '';
   let sortedLots = '<div class="row header"><div class="cell">Lot</div><div class="cell">Car</div><div class="cell">Date on Yard</div></div>';
@@ -179,37 +206,10 @@ function buildSortedTable(dataset) {
     `;
   });
   document.getElementById('lotTable').innerHTML = sortedLots;
-  addClickEventsToLotCheckboxes();
+  addClickEventToLotCheckboxes();
 }
 
-function formatDate(dateFromData) {
-  const today = new Date();
-  const carDate = new Date(dateFromData);
-  const diff = today.getTime() - carDate.getTime();
-  const days = Math.ceil(diff / (1000 * 3600 * 24));
-  return `${days} days ago`;
-  // Uncomment to just display the exact month and year
-  // const date = new Date(dateFromData).toDateString().split(' ');
-  // index in date refers to the date's:
-  // [0] - day of week 
-  // [1] - month 
-  // [2] - day
-  // [3] - year
-  // return `${date[1]} ${date[3]}`;
-}
-
-function searchDataFromJson(json) {
-  return {
-    exactMatches: [...json[0].exact],
-    closeMatches: [...json[0].other],
-  };
-}
-
-function buildTableRow(lotLocation) {
-  return `<div class="row"><div class="cell" data-title="Lot"><input type="checkbox">${lotLocation.row}</div><div class="cell" data-title="Car">${lotLocation.modelYear} ${lotLocation.makeName} ${lotLocation.modelName}</div></div>`
-}
-
-function addClickEventsToLotCheckboxes() {
+function addClickEventToLotCheckboxes() {
   const checkboxes = document.querySelectorAll('.lotCheckbox');
   checkboxes.forEach(x => x.addEventListener('change', (e) => {
     const row = e.currentTarget.parentElement.parentElement.parentElement;
