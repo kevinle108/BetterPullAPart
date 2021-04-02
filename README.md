@@ -19,6 +19,9 @@ NOTE: At this time, the app only searches cars at Pull-A-Part's Louisville locat
 - Calculate and display data based on an external factor (ex: get the current date, and display how many days remaining until some event)
 	- Calculates and displays the number of days the car on Pull-A-Part's yard (uses current date and car data obtained from API requests)
 
+## Additional Features:
+- Users can use the checkboxes next to each lot to keep track as they make their way through the scrapyard.
+
 ## Known Issues:
 - Sometimes an expanded dropdown menus will close prematurely. This might be due to the large number of the options in each select menu. 
 
