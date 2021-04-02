@@ -26,34 +26,14 @@ let dataset = {
 }
 //{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
 
-
 // --------------------------------------------------------
 //      LOGIC
 // --------------------------------------------------------
 
 // populates the year selections with years 1955 - 2020
-buildYearOptions();
-buildMakeOptions();
-// document.getElementById('carMake').addEventListener('click', buildMakeOptions, {once : true});
-
-// carMakeSelect.addEventListener("change", (e) => {
-//   const makeId = e.target.value;
-//   if (makeId == '#') {
-//     carModelSelect.innerHTML = `<option value="#">Model</option>`;
-//     return;
-//   }
-//   fetchData(modelURL + makeId).then((modelJson) => {
-//     modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
-//     carModelSelect.innerHTML = `<option value="#">Model</option>`; // resets the options
-//     for (let model of modelJson) {
-//       let txt = optionHtml;
-//       txt = txt
-//         .replace("{VALUE}", model.modelID)
-//         .replace("{OPTION}", model.modelName.toUpperCase());
-//       carModelSelect.insertAdjacentHTML("beforeend", txt);
-//     }
-//   });
-// });
+buildYears();
+// populates the make and models selections with all the possible options
+buildMakeAndModels();
 
 carMakeSelect.addEventListener("change", (e) => {
   const makeId = e.target.value;
@@ -158,7 +138,7 @@ function rebuildSortedTable(dataset) {
     `;
   });
   document.getElementById('lotTable').innerHTML = sortedLots;
-  // add click event to checkboxes
+  // add click event to checkboxes to strikethru the row
   const checkboxes = document.querySelectorAll('.lotCheckbox');
   checkboxes.forEach(x => x.addEventListener('change', (e) => {
     const row = e.currentTarget.parentElement.parentElement.parentElement;
@@ -177,7 +157,6 @@ function formatDate(dateFromData) {
   const diff = today.getTime() - carDate.getTime();
   const days = Math.ceil(diff / (1000 * 3600 * 24));
   return `${days} days ago`;
-
   // Uncomment to just display the exact month and year
   // const date = new Date(dateFromData).toDateString().split(' ');
   // index in date refers to the date's:
@@ -188,44 +167,34 @@ function formatDate(dateFromData) {
   // return `${date[1]} ${date[3]}`;
 }
 
-// function buildMakeOptions() {
-//   Promise.all([
-//     // fetchData(locURL), 
-//     fetchData(makeURL)
-//   ]).then((data) => {
-//     // const locs = data[0];
-//     let makes = data[0];
-//     makeDataSet = [...makes];
-//     makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
-//     generateOptions(makes);
-//   });
-// }
-
-function buildMakeOptions() {
-    fetchData(makeURL).then((data) => {
+function buildMakeAndModels() {
+    return fetchData(makeURL).then((data) => {
     let makes = data;
     makeDataSet = [...makes];
     makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
     generateOptions(makes);
-    console.log(makeDataSet);
-    makeDataSet.forEach(make => {
-      fetchData(modelURL + make.makeID).then((modelJson) => {
-        modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
-        let modelsHtml = `<option value="#">Model</option>`; // resets the options
-        for (let model of modelJson) {
-          let txt = optionHtml;
-          txt = txt
-            .replace("{VALUE}", model.modelID)
-            .replace("{OPTION}", model.modelName.toUpperCase());
-          modelsHtml += txt;
-        }
-        // console.log(modelsHtml);
-        const model = [make.makeID, modelsHtml];
-        modelHtmlSet.push(model);
-      });      
-    })
-    console.dir(modelHtmlSet); 
+    buildModels();
   });
+}
+
+// builds an array that contains the model options in html strings for each makeId
+// this is used to avoid making a separate api call each time a different make is selected 
+function buildModels() {
+  makeDataSet.forEach(make => {
+    fetchData(modelURL + make.makeID).then((modelJson) => {
+      modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
+      let modelsHtml = `<option value="#">Model</option>`; // resets the options
+      for (let model of modelJson) {
+        let txt = optionHtml;
+        txt = txt
+          .replace("{VALUE}", model.modelID)
+          .replace("{OPTION}", model.modelName.toUpperCase());
+        modelsHtml += txt;
+      }
+      const model = [make.makeID, modelsHtml];
+      modelHtmlSet.push(model);
+    });      
+  })
 }
 
 function buildTableRow(lotLocation) {
@@ -256,7 +225,7 @@ function fetchData(url) {
     .catch((err) => console.log("Looks like there was a problem", err));
 }
 
-function buildYearOptions() {
+function buildYears() {
   let year = 1955;
   while (year != 2021) {
     let txt = optionHtml;
