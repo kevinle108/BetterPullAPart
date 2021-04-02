@@ -1,4 +1,6 @@
-const locationID = "8"; // for Louisville
+const locationID = "8"; // locationID for Louisville
+// let locationDataSet = []; for future implementation to support more locations besides Louisville
+
 const locURL = "https://enterpriseservice.pullapart.com/Location";
 const makeURL = "https://inventoryservice.pullapart.com/Make/";
 const modelURL = "https://inventoryservice.pullapart.com/Model?makeID=";
@@ -11,86 +13,125 @@ const optionHtml = `<option value="{VALUE}">{OPTION}</option>`;
 let makeDataSet = [];
 let modelDataset = [];
 let modelHtmlSet = [];
-// let locationDataSet = []; for future implementation to support more locations besides Louisville
 let dataset = {
-
   // used for preventing duplicate searches of the same car
   searchEntries: [],
-  
   // an array of lot locations, used for sorting by row number
-  lotLocations: 
-  [
-    // will have a lotLocation
-  ],
-
+  lotLocations: [],
 }
-//{"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
 
 // --------------------------------------------------------
-//      LOGIC
+//                        LOGIC
 // --------------------------------------------------------
 
-// populates the year selections with years 1955 - 2020
 buildYears();
-// populates the make and models selections with all the possible options
 buildMakeAndModels();
+addChangeEventListenerToMake();
+addClickEventListenerToAddButton();
 
-carMakeSelect.addEventListener("change", (e) => {
-  const makeId = e.target.value;
-  if (makeId == '#') {
-    carModelSelect.innerHTML = `<option value="#">Model</option>`;
-    return;
+// --------------------------------------------------------
+//                        FUNCTIONS
+// --------------------------------------------------------
+
+function buildYears() {
+  let year = 1955;
+  while (year != 2021) {
+    let txt = optionHtml;
+    txt = txt.replace("{VALUE}", year).replace("{OPTION}", year);
+    carYearSelect.insertAdjacentHTML("beforeend", txt);
+    year++;
   }
-  const modelOptions = modelHtmlSet.find(ele => ele[0] == makeId)[1];
-  carModelSelect.innerHTML = modelOptions;
-});
+}
 
-addButton.addEventListener("click", () => {
-  if (
-    carYearSelect.value === "#" ||
-    carMakeSelect.value === "#" ||
-    carModelSelect.value === "#"
-  )
-    alert("Invalid Car Search!\nPlease make sure you select a valid Year, Make, and Model.");
-  else {
-    const makeName = carMakeSelect[carMakeSelect.selectedIndex].text;
-    const modelName = carModelSelect[carModelSelect.selectedIndex].text;
-    let _data = {
-      Locations: [locationID],
-      Models: [carModelSelect.value],
-      MakeID: carMakeSelect.value,
-      Years: [carYearSelect.value],
-    };
-    fetch(searchURL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json; charset=UTF-8" },
-      body: JSON.stringify(_data),
-    })
-      .then((response) => response.json())
-      .then((json) => {
-        const result = searchDataFromJson(json);
-        if (result.exactMatches.length == 0) {
-          alert("Sorry, no matches found for this car!");
-        } else {
-          const carName = `${carYearSelect.value} ${makeName} ${modelName}`;
-          // check if this car has already added to searchEntries
-          if (dataset.searchEntries.find(entry => entry === carName)) {
-            alert('This car is already in there!')
+function fetchData(url) {
+  return fetch(url)
+    .then((res) => res.json())
+    .catch((err) => console.log("Looks like there was a problem", err));
+}
+
+function buildMakeAndModels() {
+  fetchData(makeURL).then((data) => {
+    let makes = data;
+    makeDataSet = [...makes];
+    makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
+    generateOptions(makes);
+    buildModelsHtmls();
+  });
+}
+
+function generateOptions(makes) {
+  let html = `<option value="#">Make</option>`;
+  makes.forEach(
+    (make) =>
+      (html += optionHtml
+        .replace("{VALUE}", make.makeID)
+        .replace("{OPTION}", make.makeName.toUpperCase()))
+  );
+  carMakeSelect.innerHTML = html;
+}
+
+// builds an array that contains the model options in html strings for each makeId
+// this is used to avoid making a separate api call each time a different make is selected 
+function buildModelsHtmls() {
+makeDataSet.forEach(make => {
+  fetchData(modelURL + make.makeID).then((modelJson) => {
+    modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
+    let modelsHtml = `<option value="#">Model</option>`; // resets the options
+    for (let model of modelJson) {
+      let txt = optionHtml;
+      txt = txt
+        .replace("{VALUE}", model.modelID)
+        .replace("{OPTION}", model.modelName.toUpperCase());
+      modelsHtml += txt;
+    }
+    const model = [make.makeID, modelsHtml];
+    modelHtmlSet.push(model);
+  });      
+})
+}
+
+function addClickEventListenerToAddButton() {
+  addButton.addEventListener("click", () => {
+    if (carYearSelect.value === "#" ||
+      carMakeSelect.value === "#" ||
+      carModelSelect.value === "#")
+      alert("Invalid Car Search!\nPlease make sure you select a valid Year, Make, and Model.");
+    else {
+      // sample data required for car search: {"Locations":["8"],"Models":["861"],"MakeID":56,"Years":[]}
+      const makeName = carMakeSelect[carMakeSelect.selectedIndex].text;
+      const modelName = carModelSelect[carModelSelect.selectedIndex].text;
+      let _data = {
+        Locations: [locationID],
+        Models: [carModelSelect.value],
+        MakeID: carMakeSelect.value,
+        Years: [carYearSelect.value],
+      };
+      fetch(searchURL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json; charset=UTF-8" },
+        body: JSON.stringify(_data),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          const result = searchDataFromJson(json);
+          if (result.exactMatches.length == 0) {
+            alert("Sorry, no matches found for this car!");
           } else {
-            dataset.searchEntries.push(carName);
-            result.exactMatches.forEach(match => dataset.lotLocations.push({...match}))
-            displayCarEntry(carName, result);
-            rebuildSortedTable(dataset);
-            // console.log([locationDataSet, makeDataSet, dataset]);
+            const carName = `${carYearSelect.value} ${makeName} ${modelName}`;
+            // check if this car has already added to searchEntries
+            if (dataset.searchEntries.find(entry => entry === carName)) {
+              alert('This car is already in there!');
+            } else {
+              dataset.searchEntries.push(carName);
+              result.exactMatches.forEach(match => dataset.lotLocations.push({ ...match }));
+              displayCarEntry(carName, result);
+              buildSortedTable(dataset);
+            }
           }
-        }
-      });
-  }
-});
-
-// --------------------------------------------------------
-//      FUNCTIONS
-// --------------------------------------------------------
+        });
+    }
+  });
+}
 
 function displayCarEntry(carName, result) {
   const idName = carName.split(' ').join('_');
@@ -114,13 +155,13 @@ function displayCarEntry(carName, result) {
       return !(lot.modelYear == carYear && lot.makeName == carMake && lot.modelName == carModel);
     });
     dataset.lotLocations = filtered;
-    rebuildSortedTable(dataset);
+    buildSortedTable(dataset);
     document.getElementById(carToRemove).remove();
     dataset.searchEntries = dataset.searchEntries.filter(entry => entry !== split.join(' '));
   })
 }
 
-function rebuildSortedTable(dataset) {
+function buildSortedTable(dataset) {
   document.getElementById('lotTable').innerHTML = '';
   let sortedLots = '<div class="row header"><div class="cell">Lot</div><div class="cell">Car</div><div class="cell">Date on Yard</div></div>';
   dataset.lotLocations.sort((a, b) => a.row < b.row ? -1 : 1).forEach(lotItem => {
@@ -141,19 +182,6 @@ function rebuildSortedTable(dataset) {
   addClickEventsToLotCheckboxes();
 }
 
-function addClickEventsToLotCheckboxes() {
-  const checkboxes = document.querySelectorAll('.lotCheckbox');
-  checkboxes.forEach(x => x.addEventListener('change', (e) => {
-    const row = e.currentTarget.parentElement.parentElement.parentElement;
-    if (e.target.checked) {
-      row.style.textDecoration = 'line-through';
-    }
-    if (!e.target.checked) {
-      row.style.textDecoration = 'none';
-    }
-  }));
-}
-
 function formatDate(dateFromData) {
   const today = new Date();
   const carDate = new Date(dateFromData);
@@ -170,40 +198,6 @@ function formatDate(dateFromData) {
   // return `${date[1]} ${date[3]}`;
 }
 
-function buildMakeAndModels() {
-    return fetchData(makeURL).then((data) => {
-    let makes = data;
-    makeDataSet = [...makes];
-    makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
-    generateOptions(makes);
-    buildModels();
-  });
-}
-
-// builds an array that contains the model options in html strings for each makeId
-// this is used to avoid making a separate api call each time a different make is selected 
-function buildModels() {
-  makeDataSet.forEach(make => {
-    fetchData(modelURL + make.makeID).then((modelJson) => {
-      modelJson = modelJson.sort((a, b) => (a.modelName < b.modelName ? -1 : 1)); // sorts makes by ABC order
-      let modelsHtml = `<option value="#">Model</option>`; // resets the options
-      for (let model of modelJson) {
-        let txt = optionHtml;
-        txt = txt
-          .replace("{VALUE}", model.modelID)
-          .replace("{OPTION}", model.modelName.toUpperCase());
-        modelsHtml += txt;
-      }
-      const model = [make.makeID, modelsHtml];
-      modelHtmlSet.push(model);
-    });      
-  })
-}
-
-function buildTableRow(lotLocation) {
-  return `<div class="row"><div class="cell" data-title="Lot"><input type="checkbox">${lotLocation.row}</div><div class="cell" data-title="Car">${lotLocation.modelYear} ${lotLocation.makeName} ${lotLocation.modelName}</div></div>`
-}
-
 function searchDataFromJson(json) {
   return {
     exactMatches: [...json[0].exact],
@@ -211,29 +205,31 @@ function searchDataFromJson(json) {
   };
 }
 
-function generateOptions(makes) {
-  let html = `<option value="#">Make</option>`;
-  makes.forEach(
-    (make) =>
-      (html += optionHtml
-        .replace("{VALUE}", make.makeID)
-        .replace("{OPTION}", make.makeName.toUpperCase()))
-  );
-  carMakeSelect.innerHTML = html;
+function buildTableRow(lotLocation) {
+  return `<div class="row"><div class="cell" data-title="Lot"><input type="checkbox">${lotLocation.row}</div><div class="cell" data-title="Car">${lotLocation.modelYear} ${lotLocation.makeName} ${lotLocation.modelName}</div></div>`
 }
 
-function fetchData(url) {
-  return fetch(url)
-    .then((res) => res.json())
-    .catch((err) => console.log("Looks like there was a problem", err));
+function addClickEventsToLotCheckboxes() {
+  const checkboxes = document.querySelectorAll('.lotCheckbox');
+  checkboxes.forEach(x => x.addEventListener('change', (e) => {
+    const row = e.currentTarget.parentElement.parentElement.parentElement;
+    if (e.target.checked) {
+      row.style.textDecoration = 'line-through';
+    }
+    if (!e.target.checked) {
+      row.style.textDecoration = 'none';
+    }
+  }));
 }
 
-function buildYears() {
-  let year = 1955;
-  while (year != 2021) {
-    let txt = optionHtml;
-    txt = txt.replace("{VALUE}", year).replace("{OPTION}", year);
-    carYearSelect.insertAdjacentHTML("beforeend", txt);
-    year++;
-  }
+function addChangeEventListenerToMake() {
+  carMakeSelect.addEventListener("change", (e) => {
+    const makeId = e.target.value;
+    if (makeId == '#') {
+      carModelSelect.innerHTML = `<option value="#">Model</option>`;
+      return;
+    }
+    const modelOptions = modelHtmlSet.find(ele => ele[0] == makeId)[1];
+    carModelSelect.innerHTML = modelOptions;
+  });
 }
