@@ -54,12 +54,12 @@ function buildMakeAndModels() {
     let makes = data;
     makeDataSet = [...makes];
     makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
-    generateOptions(makes);
+    buildMakeOptions(makes);
     buildModelsHtmls();
   });
 }
 
-function generateOptions(makes) {
+function buildMakeOptions(makes) {
   let html = `<option value="#">Make</option>`;
   makes.forEach(
     (make) =>
@@ -125,7 +125,9 @@ function addClickEventListenerToAddButton() {
               dataset.searchEntries.push(carName);
               result.exactMatches.forEach(match => dataset.lotLocations.push({ ...match }));
               displayCarEntry(carName, result);
+              const previousCheckedLots = checkedLots();
               buildSortedTable(dataset);
+              recheckLotsInTable(previousCheckedLots);
             }
           }
         });
@@ -169,6 +171,8 @@ function displayCarEntry(carName, result) {
   `;
   document.getElementById("carList").insertAdjacentHTML("beforeend", carEntryHtml)
   document.getElementById(`closeButton_${idName}`).addEventListener('click', (e) => {
+    // check table for checked lots
+    const previouscheckedLots = checkedLots();
     const carToRemove = e.target.id.split('closeButton_')[1];
     const split = carToRemove.split('_');
     const carYear = split[0];
@@ -179,8 +183,29 @@ function displayCarEntry(carName, result) {
     });
     dataset.lotLocations = filtered;
     buildSortedTable(dataset);
+    // rechecked the lots that were previously checked
+    recheckLotsInTable(previouscheckedLots);
     document.getElementById(carToRemove).remove();
     dataset.searchEntries = dataset.searchEntries.filter(entry => entry !== split.join(' '));
+  })
+}
+
+function checkedLots() {
+  const boxes = document.querySelectorAll('.lotCheckbox:checked');
+  const checkedLots = [];
+  boxes.forEach(box => checkedLots.push(box.parentElement.innerText));
+  return checkedLots;
+}
+
+function recheckLotsInTable(previouscheckedLots) {
+  const labels = document.querySelectorAll('.lotValue > label');
+  labels.forEach(label => {
+    if (previouscheckedLots.includes(label.innerText)) {
+      const checkbox = label.querySelector('.lotCheckbox');
+      const row = label.parentElement.parentElement;
+      row.style.textDecoration = 'line-through';
+      checkbox.checked = 'true';
+    }
   })
 }
 
