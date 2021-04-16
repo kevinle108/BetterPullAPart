@@ -53,7 +53,7 @@ function buildMakeAndModels() {
   fetchData(makeURL).then((data) => {
     let makes = data;
     makeDataSet = [...makes];
-    makes = makes.sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // sorts makes by ABC order
+    makes = makes.filter(a => !a.rareFind).sort((a, b) => (a.makeName < b.makeName ? -1 : 1)); // filters out rares and then sorts by ABC order
     buildMakeOptions(makes);
     buildModelsHtmls();
   });
