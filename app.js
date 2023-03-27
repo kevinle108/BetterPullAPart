@@ -90,6 +90,8 @@ makeDataSet.forEach(make => {
 })
 }
 
+
+
 function addClickEventListenerToAddButton() {
   addButton.addEventListener("click", () => {
     if (carYearSelect.value === "#" ||
@@ -106,11 +108,32 @@ function addClickEventListenerToAddButton() {
         MakeID: carMakeSelect.value,
         Years: [carYearSelect.value],
       };
-      fetch(searchURL, {
-        method: "POST",
-        headers: { "Content-Type": "application/json; charset=UTF-8" },
-        body: JSON.stringify(_data),
-      })
+
+      var myHeaders = new Headers();
+      myHeaders.append("authority", "inventoryservice.pullapart.com");
+      myHeaders.append("accept", "*/*");
+      myHeaders.append("accept-language", "en-US,en;q=0.9");
+      myHeaders.append("content-type", "application/json; charset=utf-8");
+      myHeaders.append("origin", "https://www.pullapart.com");
+      myHeaders.append("referer", "https://www.pullapart.com/");
+      myHeaders.append("sec-ch-ua", "\"Google Chrome\";v=\"111\", \"Not(A:Brand\";v=\"8\", \"Chromium\";v=\"111\"");
+      myHeaders.append("sec-ch-ua-mobile", "?0");
+      myHeaders.append("sec-ch-ua-platform", "\"Windows\"");
+      myHeaders.append("sec-fetch-dest", "empty");
+      myHeaders.append("sec-fetch-mode", "cors");
+      myHeaders.append("sec-fetch-site", "same-site");
+      myHeaders.append("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36");
+
+      var raw = `{\"Locations\":[8],\"MakeID\":${_data.MakeID},\"Years\":[${_data.Years}],\"Models\":[${_data.Models}]}`
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      fetch("https://inventoryservice.pullapart.com/Vehicle/Search", requestOptions)
         .then((response) => response.json())
         .then((json) => {
           const result = searchDataFromJson(json);
